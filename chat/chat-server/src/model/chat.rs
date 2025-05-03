@@ -153,7 +153,7 @@ impl AppState {
             UPDATE chats
             SET name = $1, members = $2, type = $3
             WHERE id = $4
-            RETURNING id, ws_id, name, type, members, created_at
+            RETURNING id, ws_id, name, type, members, agents, created_at
                 "#,
         )
         .bind(name)

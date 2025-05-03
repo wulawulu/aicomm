@@ -10,7 +10,7 @@ CREATE TYPE agent_type AS ENUM ('proxy', 'reply', 'tap');
 -- add chat_agent table
 CREATE TABLE IF NOT EXISTS chat_agents(
     id BIGSERIAL PRIMARY KEY,
-    chat_id BIGINT NOT NULL REFERENCES chats(id),
+    chat_id BIGINT NOT NULL REFERENCES chats(id) ON DELETE CASCADE,
     name TEXT NOT NULL UNIQUE,
     type agent_type NOT NULL DEFAULT 'reply',
     prompt TEXT NOT NULL,

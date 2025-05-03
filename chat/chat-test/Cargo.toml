@@ -11,7 +11,7 @@ chat-server = { workspace = true, features = ["test-util"] }
 notify-server = { workspace = true }
 anyhow = { workspace = true }
 axum = { workspace = true }
-reqwest = { version = "0.12.14", default-features = false, features = [
+reqwest = { version = "0.12.15", default-features = false, features = [
     "rustls-tls",
     "json",
     "multipart",
