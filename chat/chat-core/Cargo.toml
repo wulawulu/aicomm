@@ -10,9 +10,11 @@ axum= {workspace = true}
 axum-extra= {workspace = true}
 sqlx ={workspace = true}
 serde = {workspace = true}
+serde_json = {workspace = true}
 chrono = {workspace = true}
 tokio = {workspace = true}
 uuid = {workspace = true}
+thiserror = { workspace = true }
 tracing = { workspace = true }
 jwt-simple = { workspace = true }
 tower = { workspace = true }
