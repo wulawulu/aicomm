@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>SSE handler</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+</head>
+<body>
+<!--[if lt IE 7]>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<h1>Server Sent Events</h1>
+
+<script lang="javascript">
+    let token='eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NDI0NzEyMzcsImV4cCI6MTc0MzA3NjAzNywibmJmIjoxNzQyNDcxMjM3LCJpc3MiOiJjaGF0LXNlcnZlciIsImF1ZCI6ImNoYXRfd2ViIiwiaWQiOjIsIndzX2lkIjoxLCJmdWxsbmFtZSI6IkFsZXggQ2hlbiIsImVtYWlsIjoiQWxleEBnaXRodWIub3JnIiwiY3JlYXRlZF9hdCI6IjIwMjUtMDMtMTVUMTM6NTU6NDQuOTYwOTcwWiJ9.Ud4P5PPCokKGCc6PWV985MO6RQME9PQWGeFx_p_3VxzHIo3lGiC8rp8-pe7nPSe73lC3MoQmX80kMViac4O4Bw';
+    let source = new EventSource(`/events?token=${token}`);
+    source.onmessage = function(event) {
+        console.log("Got:", event.data);
+    };
+    source.addEventListener("NewChat", function(event) {
+        console.log("NewChat:", event.data);
+    });
+
+    source.addEventListener("AddToChat", function(event) {
+        console.log("AddToChat:", event.data);
+    });
+
+    source.addEventListener("RemoveFromChat", function(event) {
+        console.log("RemoveFromChat:", event.data);
+    });
+
+    source.addEventListener("NewMessage", function(event) {
+        console.log("NewMessage:", event.data);
+    });
+
+    source.addEventListener("ChatNameUpdate", function(event) {
+        console.log("ChatNameUpdate:", event.data);
+    });
+</script>
+</body>
+</html>

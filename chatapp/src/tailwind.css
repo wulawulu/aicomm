@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+@theme {
+  /* 添加自定义字体 */
+  --font-sans: 'Inter', sans-serif;
+
+  /* 添加你的自定义颜色和其他配置 */
+}

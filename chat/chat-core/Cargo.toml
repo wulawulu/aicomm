@@ -1,0 +1,20 @@
+[package]
+name = "chat-core"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+
+[dependencies]
+anyhow = { workspace = true }
+axum= {workspace = true}
+axum-extra= {workspace = true}
+sqlx ={workspace = true}
+serde = {workspace = true}
+chrono = {workspace = true}
+tokio = {workspace = true}
+uuid = {workspace = true}
+tracing = { workspace = true }
+jwt-simple = { workspace = true }
+tower = { workspace = true }
+tower-http = {workspace = true }
+utoipa = { version = "5.3.1", features = ["axum_extras", "chrono"] }

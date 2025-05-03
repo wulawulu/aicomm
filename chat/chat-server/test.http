@@ -1,0 +1,121 @@
+### signup user
+
+POST http://localhost:6688/api/signup
+Content-Type: application/json
+Authorization: Bearer fpKL54jvWmEGVoRdCNj
+
+{
+  "workspace": "grad",
+  "fullname": "Cristiano Ronaldo",
+  "email": "Cris@github.org",
+  "password": "123456"
+}
+
+### signup user
+
+POST http://localhost:6688/api/signup
+Content-Type: application/json
+Authorization: Bearer fpKL54jvWmEGVoRdCNj
+
+{
+  "workspace": "grad",
+  "fullname": "Alex Chen",
+  "email": "Alex@github.org",
+  "password": "123456"
+}
+
+### signin user (valid)
+
+# @name signin
+POST http://localhost:6688/api/signin
+Content-Type: application/json
+
+{
+  "email": "Cris@github.org",
+  "password": "123456"
+}
+
+> {% client.global.set("token", response.body.token); %}
+
+
+
+
+### signin user (invalid)
+
+POST http://localhost:6688/api/signin
+Content-Type: application/json
+
+{
+  "email": "alice@github.org",
+  "password": "123456"
+}
+
+
+
+### create chat
+POST http://localhost:6688/api/chats
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "github",
+  "members": [1, 2],
+  "public": false
+}
+
+### chat
+
+GET http://localhost:6688/api/chats
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### chat
+
+GET http://localhost:6688/api/chats/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### users
+
+GET http://localhost:6688/api/users
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### upload files
+
+POST http://localhost:6688/api/upload
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=MyBoundary
+
+--MyBoundary
+Content-Disposition: form-data; filename="xdiff1.png"
+Content-Type: application/octet-stream
+
+< C:\Users\wutuo\Pictures\Screenshots\屏幕截图 2024-09-01 172206.png
+--MyBoundary
+Content-Disposition: form-data; filename="hello.txt"
+Content-Type: text/plain
+
+Hello, World!
+--MyBoundary--
+
+
+### get files
+
+GET http://localhost:6688/api/files/1/232/197/439badd72a380decd4f8bf7510a695aae6.png
+Authorization: Bearer {{token}}
+
+### send a message
+
+POST http://localhost:6688/api/chats/1/messages
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+ {
+     "content": "Hello, World!",
+     "files": []
+ }
+
+### get messages
+GET http://localhost:6688/api/chats/1/messages?limit=6&last_id=5
+Authorization: Bearer {{token}}

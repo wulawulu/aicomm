@@ -1,0 +1,99 @@
+### signup user
+
+POST http://localhost:6688/api/signup
+Content-Type: application/json
+
+{
+"workspace": "acme", "fullname": "Tyr Chen", "email": "tchen@acme.org", "password": "123456"
+}
+
+### signup user
+
+POST http://localhost:6688/api/signup
+Content-Type: application/json
+
+{
+"workspace": "acme", "fullname": "Alice Chen", "email": "alice@acme.org", "password": "123456"
+}
+
+### signin user (valid)
+
+POST http://localhost:6688/api/signin
+Content-Type: application/json
+
+{
+"email": "tchen@acme.org", "password": "123456"
+}
+
+### signin user (invalid)
+
+# @name signin
+POST http://localhost:6688/api/signin
+Content-Type: application/json
+
+{
+"email": "tchen@acme.org", "password": "123456"
+}
+
+@token = {{signin.response.body.token}}
+
+### create chat
+POST http://localhost:6688/api/chats
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+"name": "project X", "members": [1, 2], "public": false
+}
+
+### create direct chat
+POST http://localhost:6688/api/chats
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+"members": [1, 2], "public": false
+}
+
+### get chat list
+
+GET http://localhost:6688/api/chats
+Authorization: Bearer {{token}}
+
+### get user list
+
+GET http://localhost:6688/api/users
+Authorization: Bearer {{token}}
+
+### upload files
+
+POST http://localhost:6688/api/upload
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=MyBoundary
+
+--MyBoundary
+Content-Disposition: form-data; filename="hello.txt"
+Content-Type: text/plain
+
+Hello, World!
+--MyBoundary--
+
+### get files
+
+GET http://localhost:6688/api/files/2/0a0/a9f/2a6772942557ab5355d76af442f8f65e01.txt
+Authorization: Bearer {{token}}
+
+### send a message
+
+POST http://localhost:6688/api/chats/2/messages
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+"content": "hello?", "files": []
+}
+
+### get messages
+
+GET http://localhost:6688/api/chats/2/messages
+Authorization: Bearer {{token}}
