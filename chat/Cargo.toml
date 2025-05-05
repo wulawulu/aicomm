@@ -1,5 +1,5 @@
 [workspace]
-members = [ "chat-core","chat-server", "chat-test", "notify-server"]
+members = [ "ai_sdk", "chat-core","chat-server", "chat-test", "notify-server"]
 
 resolver = "2"
 
