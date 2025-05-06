@@ -21,10 +21,10 @@ pub async fn verify_chat(
         .await
         .unwrap_or_default()
     {
-        let err = AppError::CreateMessageError(format!(
-            "User {} are not as member of chat {chat_id}",
-            user.id
-        ));
+        let err = AppError::NotChatMemberError {
+            user_id: user.id as _,
+            chat_id,
+        };
         return err.into_response();
     }
 
@@ -87,7 +87,7 @@ mod tests {
                     .body(Body::empty())?,
             )
             .await?;
-        assert_eq!(response.status(), StatusCode::BAD_REQUEST);
+        assert_eq!(response.status(), StatusCode::FORBIDDEN);
 
         Ok(())
     }

@@ -106,10 +106,13 @@ pub struct Message {
     pub created_at: DateTime<Utc>,
 }
 
-#[derive(Debug, Clone, ToSchema, Serialize, Deserialize, PartialEq, PartialOrd, sqlx::Type)]
+#[derive(
+    Debug, Clone, Default, ToSchema, Serialize, Deserialize, PartialEq, PartialOrd, sqlx::Type,
+)]
 #[sqlx(type_name = "agent_type", rename_all = "snake_case")]
 #[serde(rename_all(serialize = "camelCase"))]
 pub enum AgentType {
+    #[default]
     #[serde(alias = "proxy", alias = "Proxy")]
     Proxy,
     #[serde(alias = "reply", alias = "Reply")]

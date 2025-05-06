@@ -29,7 +29,8 @@ struct AuthToken {
 }
 const WILD_ADDR: &str = "0.0.0.0:0";
 
-// #[tokio::test]
+#[ignore]
+#[tokio::test]
 async fn test_chat_server() -> Result<()> {
     let (tdb, state) = chat_server::AppState::new_for_test().await?;
     let chat_server = ChatServer::new(state).await?;

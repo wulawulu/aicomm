@@ -23,11 +23,20 @@ pub enum AppError {
     #[error("create chat error: {0}")]
     CreateChatError(String),
 
+    #[error("create agent error: {0}")]
+    CreateAgentError(String),
+
+    #[error("update agent error: {0}")]
+    UpdateAgentError(String),
+
     #[error("{0}")]
     ChatFileError(String),
 
     #[error("create message error: {0}")]
     CreateMessageError(String),
+
+    #[error("user {user_id} is not member of chat {chat_id}")]
+    NotChatMemberError { user_id: u64, chat_id: u64 },
 
     #[error("io error: {0}")]
     IoError(#[from] std::io::Error),
@@ -49,6 +58,9 @@ impl IntoResponse for AppError {
             AppError::HttpHeaderError(_) => StatusCode::UNPROCESSABLE_ENTITY,
             AppError::CreateChatError(_) => StatusCode::BAD_REQUEST,
             AppError::UpdateChatError(_) => StatusCode::BAD_REQUEST,
+            AppError::CreateAgentError(_) => StatusCode::BAD_REQUEST,
+            AppError::UpdateAgentError(_) => StatusCode::BAD_REQUEST,
+            AppError::NotChatMemberError { .. } => StatusCode::FORBIDDEN,
             AppError::NotFound(_) => StatusCode::NOT_FOUND,
             AppError::IoError(_) => StatusCode::INTERNAL_SERVER_ERROR,
             AppError::ChatFileError(_) => StatusCode::BAD_REQUEST,
