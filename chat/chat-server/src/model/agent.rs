@@ -1,5 +1,5 @@
 use crate::{AppError, AppState};
-use chat_core::{AgentType, ChatAgent};
+use chat_core::{AdapterType, AgentType, ChatAgent};
 use serde::{Deserialize, Serialize};
 use tracing::info;
 use utoipa::{IntoParams, ToSchema};
@@ -8,6 +8,8 @@ use utoipa::{IntoParams, ToSchema};
 pub struct CreateAgent {
     pub name: String,
     pub r#type: AgentType,
+    pub adapter: AdapterType,
+    pub model: String,
     pub prompt: String,
     #[serde(default = "default_map")]
     pub args: serde_json::Value,
@@ -42,14 +44,16 @@ impl AppState {
 
         let chat = sqlx::query_as(
             r#"
-            INSERT INTO chat_agents (chat_id, name, type, prompt, args)
-            VALUES ($1, $2, $3, $4, $5)
+            INSERT INTO chat_agents (chat_id, name, type, adapter, model, prompt, args)
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
             RETURNING *
                 "#,
         )
         .bind(chat_id as i64)
         .bind(input.name)
         .bind(input.r#type)
+        .bind(input.adapter)
+        .bind(input.model)
         .bind(input.prompt)
         .bind(input.args)
         .fetch_one(&self.pool)
@@ -168,12 +172,16 @@ impl CreateAgent {
     pub fn new(
         name: impl Into<String>,
         r#type: AgentType,
+        adapter: AdapterType,
+        model: impl Into<String>,
         prompt: impl Into<String>,
         args: impl Serialize,
     ) -> Self {
         Self {
             name: name.into(),
             r#type,
+            adapter,
+            model: model.into(),
             prompt: prompt.into(),
             args: serde_json::to_value(args).unwrap(),
         }
@@ -204,7 +212,9 @@ mod tests {
         let input = CreateAgent::new(
             "test",
             AgentType::Reply,
-            "test",
+            AdapterType::Ollama,
+            "llama3.2",
+            "You are a helpful assistant",
             HashMap::<String, String>::new(),
         );
         let agent = state
@@ -214,7 +224,9 @@ mod tests {
         assert_eq!(agent.chat_id, 1);
         assert_eq!(agent.name, "test");
         assert_eq!(agent.r#type, AgentType::Reply);
-        assert_eq!(agent.prompt, "test");
+        assert_eq!(agent.adapter, AdapterType::Ollama);
+        assert_eq!(agent.model, "llama3.2");
+        assert_eq!(agent.prompt, "You are a helpful assistant");
         assert_eq!(agent.args, serde_json::json!({}));
 
         Ok(())
@@ -232,6 +244,8 @@ mod tests {
         assert_eq!(agent.name, "translation");
         assert_eq!(agent.chat_id, 1);
         assert_eq!(agent.r#type, AgentType::Proxy);
+        assert_eq!(agent.adapter, AdapterType::Ollama);
+        assert_eq!(agent.model, "qwen3:0.6b");
         assert_eq!(agent.prompt, "If language is Chinese, translate to English, if language is English, translate to Chinese. Please reply with the translated content directly. No explanation is needed. Here is the content: ");
         assert_eq!(agent.args, serde_json::json!({}));
 
@@ -246,6 +260,8 @@ mod tests {
         assert_eq!(agents.len(), 1);
         assert_eq!(agents[0].name, "translation");
         assert_eq!(agents[0].r#type, AgentType::Proxy);
+        assert_eq!(agents[0].adapter, AdapterType::Ollama);
+        assert_eq!(agents[0].model, "qwen3:0.6b");
         assert_eq!(agents[0].prompt, "If language is Chinese, translate to English, if language is English, translate to Chinese. Please reply with the translated content directly. No explanation is needed. Here is the content: ");
         assert_eq!(agents[0].args, serde_json::json!({}));
 
@@ -275,6 +291,8 @@ mod tests {
         let input = CreateAgent::new(
             "test",
             AgentType::Proxy,
+            AdapterType::Ollama,
+            "llama3.2",
             "You are a helpful assistant",
             HashMap::<String, String>::new(),
         );
