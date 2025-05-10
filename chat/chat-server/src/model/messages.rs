@@ -141,10 +141,13 @@ impl AppState {
 mod tests {
     use super::*;
     use anyhow::Result;
+    use serde_json::json;
+    use wiremock::{matchers::path, Mock, MockServer, ResponseTemplate};
 
     #[tokio::test]
     async fn create_message_should_work() -> Result<()> {
         let (_tdb, state) = AppState::new_for_test().await?;
+        let _mock_server = mock_ollama_server().await;
         let input = CreateMessage {
             content: "hello".to_string(),
             files: vec![],
@@ -211,5 +214,29 @@ mod tests {
         std::fs::write(&path, b"hello world")?;
 
         Ok(file.url())
+    }
+
+    async fn mock_ollama_server() -> MockServer {
+        let listener = std::net::TcpListener::bind("127.0.0.1:11434").unwrap();
+        let mock_server = MockServer::builder().listener(listener).start().await;
+        Mock::given(path("/api/chat"))
+            .respond_with(ResponseTemplate::new(200).set_body_json(json!({
+                "model": "qwen3:0.6b",
+                "created_at": "2024-01-01T00:00:00.000Z",
+                "message": {
+                    "role": "assistant",
+                    "content": "Hello, world!"
+                },
+                "done": false,
+                "total_duration": 1000,
+                "load_duration": 1000,
+                "prompt_eval_count": 1000,
+                "prompt_eval_duration": 1000,
+                "eval_count": 1000,
+                "eval_duration": 1000
+            })))
+            .mount(&mock_server)
+            .await;
+        mock_server
     }
 }
