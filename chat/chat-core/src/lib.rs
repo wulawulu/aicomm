@@ -44,6 +44,8 @@ pub struct User {
     pub fullname: String,
     pub email: String,
     #[sqlx(default)]
+    pub is_bot: bool,
+    #[sqlx(default)]
     #[serde(skip)]
     pub password_hash: Option<String>,
     pub created_at: DateTime<Utc>,
@@ -163,6 +165,7 @@ impl User {
             ws_name: "".to_string(),
             fullname: fullname.to_string(),
             email: email.to_string(),
+            is_bot: false,
             password_hash: None,
             created_at: Utc::now(),
         }

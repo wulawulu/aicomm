@@ -49,9 +49,14 @@ impl AppState {
         let mut agents = self.list_agent(chat_id).await?;
         let decision = if let Some(agent) = agents.pop() {
             let agent: AgentVariant = agent.into();
-            agent
-                .process(&input.content, &AgentContext::default())
-                .await?
+            match agent {
+                AgentVariant::Proxy(agent) => {
+                    agent
+                        .process(&input.content, &AgentContext::default())
+                        .await?
+                }
+                _ => AgentDecision::None,
+            }
         } else {
             AgentDecision::None
         };
