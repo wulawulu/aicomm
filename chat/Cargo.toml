@@ -33,5 +33,5 @@ sqlx = { version = "0.8.5", features = [
     "tls-rustls",
 ] }
 uuid = { version = "1.16.0", features = ["v4", "v7"] }
-jwt-simple = "0.12.12"
+josekit = "0.10.1"
 serde_json = "1.0.140"

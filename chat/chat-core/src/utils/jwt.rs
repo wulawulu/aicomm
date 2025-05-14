@@ -1,6 +1,14 @@
 use crate::User;
-use jwt_simple::prelude::*;
-use std::collections::HashSet;
+use serde_json::Value;
+
+use josekit::{
+    JoseError,
+    jws::{
+        EdDSA, JwsHeader,
+        alg::eddsa::{EddsaJwsSigner, EddsaJwsVerifier},
+    },
+    jwt::{self, JwtPayload},
+};
 
 #[allow(unused)]
 const JWT_DURATION: u64 = 60 * 60 * 24 * 7;
@@ -10,38 +18,44 @@ const JWT_ISS: &str = "chat-server";
 const JWT_AUD: &str = "chat_web";
 
 #[allow(unused)]
-pub struct EncodingKey(Ed25519KeyPair);
+pub struct EncodingKey(EddsaJwsSigner);
 
 #[allow(unused)]
-pub struct DecodingKey(Ed25519PublicKey);
+pub struct DecodingKey(EddsaJwsVerifier);
 
 #[allow(unused)]
 impl EncodingKey {
-    pub fn load(pem: &str) -> Result<Self, jwt_simple::Error> {
-        Ok(Self(Ed25519KeyPair::from_pem(pem)?))
+    pub fn load(pem: &str) -> Result<Self, JoseError> {
+        let private_key = pem.as_bytes();
+        let signer = EdDSA.signer_from_pem(private_key)?;
+        Ok(Self(signer))
     }
 
-    pub fn sign(&self, user: impl Into<User>) -> Result<String, jwt_simple::Error> {
-        let claims = Claims::with_custom_claims(user.into(), Duration::from_secs(JWT_DURATION));
-        let claims = claims.with_issuer(JWT_ISS).with_audience(JWT_AUD);
-        self.0.sign(claims)
+    pub fn sign(&self, user: impl Into<User>) -> Result<String, JoseError> {
+        let mut header = JwsHeader::new();
+        header.set_token_type("JWT");
+        let mut payload = JwtPayload::new();
+        let user_json = serde_json::to_string(&user.into()).unwrap();
+        payload.set_claim("custom", Some(Value::String(user_json)));
+        payload.set_issuer(JWT_ISS);
+        payload.set_audience(vec![JWT_AUD]);
+
+        jwt::encode_with_signer(&payload, &header, &self.0)
     }
 }
 
 #[allow(unused)]
 impl DecodingKey {
-    pub fn load(pem: &str) -> Result<Self, jwt_simple::Error> {
-        Ok(Self(Ed25519PublicKey::from_pem(pem)?))
+    pub fn load(pem: &str) -> Result<Self, JoseError> {
+        let verifier = EdDSA.verifier_from_pem(pem)?;
+        Ok(Self(verifier))
     }
 
-    pub fn verify(&self, token: &str) -> Result<User, jwt_simple::Error> {
-        let opts = VerificationOptions {
-            allowed_issuers: Some(HashSet::from_strings(&[JWT_ISS])),
-            allowed_audiences: Some(HashSet::from_strings(&[JWT_AUD])),
-            ..Default::default()
-        };
-        let claims = self.0.verify_token(token, Some(opts))?;
-        Ok(claims.custom)
+    pub fn verify(&self, token: &str) -> Result<User, JoseError> {
+        let (payload, _) = jwt::decode_with_verifier(token, &self.0)?;
+        let user_json = payload.claim("custom").unwrap().as_str().unwrap();
+        let user: User = serde_json::from_str(user_json).unwrap();
+        Ok(user)
     }
 }
 

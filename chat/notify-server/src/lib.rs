@@ -3,7 +3,6 @@ mod error;
 mod notify;
 mod sse;
 
-use anyhow::Context;
 use axum::http::Method;
 pub use config::AppConfig;
 use std::fmt;
@@ -66,7 +65,7 @@ pub struct AppStateInner {
 
 impl AppState {
     pub async fn try_new(config: AppConfig) -> Result<Self, AppError> {
-        let dk = DecodingKey::load(&config.auth.pk).context("load pk failed")?;
+        let dk = DecodingKey::load(&config.auth.pk)?;
         let users = Arc::new(DashMap::new());
         Ok(Self(Arc::new(AppStateInner { config, dk, users })))
     }
@@ -76,7 +75,7 @@ impl TokenVerify for AppState {
     type Error = AppError;
 
     fn verify(&self, token: &str) -> Result<User, Self::Error> {
-        self.dk.verify(token).map_err(AppError::from)
+        self.dk.verify(token).map_err(AppError::JwtError)
     }
 }
 

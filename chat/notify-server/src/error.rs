@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 #[derive(thiserror::Error, Debug)]
 pub enum AppError {
     #[error("jwt error: {0}")]
-    JwtError(#[from] jwt_simple::Error),
+    JwtError(#[from] josekit::JoseError),
 
     #[error("io error: {0}")]
     IoError(#[from] std::io::Error),

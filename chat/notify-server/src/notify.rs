@@ -1,6 +1,5 @@
 use crate::AppState;
 use chat_core::{Chat, Message};
-use jwt_simple::reexports::serde_json;
 use serde::{Deserialize, Serialize};
 use sqlx::postgres::PgListener;
 use std::collections::HashSet;

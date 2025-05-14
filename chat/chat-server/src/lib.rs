@@ -40,8 +40,8 @@ pub struct AppStateInner {
 
 impl AppState {
     pub async fn try_new(config: AppConfig) -> Result<Self, AppError> {
-        let dk = DecodingKey::load(&config.auth.pk).context("load pk failed")?;
-        let ek = EncodingKey::load(&config.auth.sk).context("load sk failed")?;
+        let dk = DecodingKey::load(&config.auth.pk)?;
+        let ek = EncodingKey::load(&config.auth.sk)?;
         let pool = PgPool::connect(&config.server.db_url)
             .await
             .context("connect to db failed")?;

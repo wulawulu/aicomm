@@ -16,7 +16,7 @@ pub enum AppError {
     PasswordHashError(#[from] argon2::password_hash::Error),
 
     #[error("jwt error: {0}")]
-    JwtError(#[from] jwt_simple::Error),
+    JwtError(#[from] josekit::JoseError),
 
     #[error("http header parse error: {0}")]
     HttpHeaderError(#[from] http::header::InvalidHeaderValue),
@@ -50,6 +50,9 @@ pub enum AppError {
 
     #[error("Not found: {0}")]
     NotFound(String),
+
+    #[error("other error: {0}")]
+    Other(#[from] anyhow::Error),
 }
 
 impl IntoResponse for AppError {
@@ -70,6 +73,7 @@ impl IntoResponse for AppError {
             AppError::ChatFileError(_) => StatusCode::BAD_REQUEST,
             AppError::CreateMessageError(_) => StatusCode::BAD_REQUEST,
             AppError::AiAgentError(_) => StatusCode::INTERNAL_SERVER_ERROR,
+            AppError::Other(_) => StatusCode::INTERNAL_SERVER_ERROR,
         };
         (status, Json(ErrorOutput::new(self.to_string()))).into_response()
     }
