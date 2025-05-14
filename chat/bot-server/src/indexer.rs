@@ -5,7 +5,7 @@ use swiftide::{
         self, EmbeddedField,
         loaders::FileLoader,
         transformers::{
-            ChunkCode, Embed, MetadataQACode, metadata_qa_text::NAME as METADATA_QA_TEXT_NAME,
+            ChunkCode, Embed, MetadataQACode, metadata_qa_code::NAME as METADATA_QA_CODE_NAME,
         },
     },
     integrations::{self, pgvector::PgVector},
@@ -21,26 +21,26 @@ async fn main() -> Result<()> {
     let config = AppConfig::load()?;
     let db_url = &config.server.db_url;
 
-    let client = integrations::openai::OpenAI::builder()
-        .default_embed_model("text-embedding-3-small")
-        .default_prompt_model("gpt-4o-mini")
-        .build()?;
+    let fastembed = integrations::fastembed::FastEmbed::try_default()?;
+    let client = integrations::ollama::Ollama::default()
+        .with_default_prompt_model("qwen3:0.6b")
+        .to_owned();
     let store = PgVector::builder()
         .db_url(db_url)
         .vector_size(VECTOR_SIZE)
         .with_vector(EmbeddedField::Combined)
-        .with_metadata(METADATA_QA_TEXT_NAME)
+        .with_metadata(METADATA_QA_CODE_NAME)
         .table_name("swiftide".to_string())
         .build()
         .unwrap();
 
     indexing::Pipeline::from_loader(FileLoader::new(".").with_extensions(&["rs"]))
-        .then(MetadataQACode::new(client.clone()))
         .then_chunk(ChunkCode::try_for_language_and_chunk_size(
             "rust",
             10..2048,
         )?)
-        .then_in_batch(Embed::new(client).with_batch_size(10))
+        .then(MetadataQACode::new(client.clone()).with_concurrency(5))
+        .then_in_batch(Embed::new(fastembed))
         .then_store_with(store)
         .run()
         .await?;

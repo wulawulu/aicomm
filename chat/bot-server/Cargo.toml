@@ -22,7 +22,8 @@ sqlx = { workspace = true }
 swiftide = { version = "0.26.0", features = [
     "pgvector",
     "tree-sitter",
-    "openai",
+    "ollama",
+    "fastembed",
 ] }
 tokio = { workspace = true }
 tokio-stream = { version = "0.1.17", features = ["sync"] }

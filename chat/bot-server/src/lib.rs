@@ -37,10 +37,10 @@ pub async fn setup_pg_listener(config: &AppConfig) -> anyhow::Result<()> {
         .build()
         .unwrap();
 
-    let client = integrations::openai::OpenAI::builder()
-        .default_embed_model("text-embedding-3-small")
-        .default_prompt_model("gpt-4o-mini")
-        .build()?;
+    let fastembed = integrations::fastembed::FastEmbed::try_default()?;
+    let client = integrations::ollama::Ollama::default()
+        .with_default_prompt_model("llama3.2")
+        .to_owned();
 
     let mut stream = listener.into_stream();
 
@@ -51,7 +51,7 @@ pub async fn setup_pg_listener(config: &AppConfig) -> anyhow::Result<()> {
             let pool = pool.clone();
             let store = store.clone();
             let client = client.clone();
-            let embed = client.clone();
+            let embed = fastembed.clone();
             tokio::spawn(async move { notification.process(pool, store, client, embed).await });
         }
     }
