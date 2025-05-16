@@ -7,6 +7,7 @@ async fn main() -> Result<()> {
     let client = Client::default()
         .with_url("http://localhost:8123")
         .with_user("default")
+        .with_password("default")
         .with_database("analytics");
 
     let mut cursor = client

@@ -2,7 +2,7 @@ use analytics_server::pb::{
     AnalyticsEvent, AppExitEvent, EventContext, GeoLocation, SystemInfo,
     analytics_event::EventType, app_exit_event::ExitCode,
 };
-use anyhow::Result;
+use anyhow::{Context, Result};
 use prost::Message;
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -42,15 +42,16 @@ async fn main() -> Result<()> {
     let client = reqwest::Client::new();
     let data = Message::encode_to_vec(&event);
     // write data to "../../fixtures/event.bin"
-    std::fs::write("../../fixtures/event.bin", &data)?;
+    std::fs::write("../../fixtures/event.bin", &data).context("write event to file")?;
     // load data from "../../fixtures/event.bin"
-    let data1 = std::fs::read("../../fixtures/event.bin")?;
+    let data1 = std::fs::read("../../fixtures/event.bin").context("read event from file")?;
     // parse data1 to event
     let event1 = AnalyticsEvent::decode(data1.as_slice())?;
     println!("{:?}", event1);
     let res = client
         .post("http://127.0.0.1:6690/api/event")
         .header("content-type", "application/protobuf")
+        .header("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJFZERTQSJ9.eyJjdXN0b20iOiJ7XCJpZFwiOjEsXCJ3c0lkXCI6MSxcIndzTmFtZVwiOlwiYWNtZVwiLFwiZnVsbG5hbWVcIjpcIlR5ciBDaGVuXCIsXCJlbWFpbFwiOlwidGNoZW5AYWNtZS5vcmdcIixcImlzQm90XCI6ZmFsc2UsXCJjcmVhdGVkQXRcIjpcIjIwMjUtMDUtMTZUMTI6NTA6MzIuMDI1NzE3WlwifSIsImlzcyI6ImNoYXQtc2VydmVyIiwiYXVkIjoiY2hhdF93ZWIifQ.8fegMwIGaJe10iyX9HKJE45gU3yOplTik5cwnVUiW4CVuxFXI5IEqXRFOLyuzhOGnvnK5FIm52HA1Qqd1NT9Cw")
         .body(data)
         .send()
         .await?;

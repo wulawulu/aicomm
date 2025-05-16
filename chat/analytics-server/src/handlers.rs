@@ -54,7 +54,7 @@ pub(crate) async fn create_event_handler(
     let data = serde_json::to_string_pretty(&row).unwrap();
     info!("event: {}", data);
 
-    let mut insert = state.client.insert("analytics")?;
+    let mut insert = state.client.insert("analytics_events")?;
     insert.write(&row).await?;
     insert.end().await?;
 

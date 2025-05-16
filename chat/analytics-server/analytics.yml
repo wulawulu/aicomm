@@ -2,9 +2,9 @@ server:
   port: 6690
   db_url: http://localhost:8123
   db_user: default
-  db_password: ~
+  db_password: default
   db_name: analytics
-  base_url: /tmp/analytics_server
+  base_dir: /tmp/analytics_server
 auth:
   pk: |
     -----BEGIN PUBLIC KEY-----
