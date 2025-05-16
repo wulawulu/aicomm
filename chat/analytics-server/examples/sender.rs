@@ -1,6 +1,6 @@
 use analytics_server::pb::{
-    analytics_event::EventType, app_exit_event::ExitCode, AnalyticsEvent, AppExitEvent,
-    EventContext, GeoLocation, SystemInfo,
+    AnalyticsEvent, AppExitEvent, EventContext, GeoLocation, SystemInfo,
+    analytics_event::EventType, app_exit_event::ExitCode,
 };
 use anyhow::Result;
 use prost::Message;
