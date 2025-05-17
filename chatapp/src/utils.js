@@ -1,7 +1,7 @@
 import { invoke } from '@tauri-apps/api/core';
 
 const URL_BASE = 'http://localhost:6688/api';
-const SSE_URL = 'http://localhost:6687/events111';
+const SSE_URL = 'http://localhost:6687/events';
 
 let config = null;
 try {

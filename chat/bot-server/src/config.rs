@@ -11,6 +11,7 @@ pub struct AppConfig {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ServerConfig {
     pub db_url: String,
+    pub model: String,
 }
 
 impl AppConfig {

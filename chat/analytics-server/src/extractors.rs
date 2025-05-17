@@ -52,11 +52,16 @@ where
     type Rejection = ProtobufRejection;
 
     async fn from_request(req: Request, _: &S) -> Result<Self, Self::Rejection> {
-        req.headers()
-            .get("content-type")
-            .and_then(|value| value.to_str().ok())
-            .filter(|value| *value == "application/protobuf")
-            .ok_or(ProtobufRejection::MissingProtobufContentType)?;
+        // if content type exists but is not application/protobuf, reject
+        if let Some(content_type) = req.headers().get("content-type") {
+            content_type
+                .to_str()
+                .ok()
+                .filter(|value| {
+                    *value == "application/protobuf" || *value == "application/octet-stream"
+                })
+                .ok_or(ProtobufRejection::MissingProtobufContentType)?;
+        }
 
         let mut body = req.into_body().into_data_stream();
         let mut buffer = Vec::new();

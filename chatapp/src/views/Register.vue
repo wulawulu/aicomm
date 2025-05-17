@@ -46,6 +46,7 @@ export default {
   methods: {
     async register() {
       try {
+        this.$store.dispatch('userRegister', { email: this.email, workspaceId: this.workspaceName });
         const user = await this.$store.dispatch('signup', {
           email: this.email,
           fullname: this.fullName,

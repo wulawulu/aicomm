@@ -39,7 +39,7 @@ pub async fn setup_pg_listener(config: &AppConfig) -> anyhow::Result<()> {
 
     let fastembed = integrations::fastembed::FastEmbed::try_default()?;
     let client = integrations::ollama::Ollama::default()
-        .with_default_prompt_model("llama3.2")
+        .with_default_prompt_model(&config.server.model)
         .to_owned();
 
     let mut stream = listener.into_stream();

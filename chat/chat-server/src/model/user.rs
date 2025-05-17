@@ -48,7 +48,7 @@ impl AppState {
         };
 
         let password_hash = hash_password(&input.password)?;
-        let is_bot = input.email.ends_with("@bot.com");
+        let is_bot = input.email.ends_with("@bot.org");
         let mut user: User = sqlx::query_as(
             r#"
             INSERT INTO users (ws_id, email, fullname, password_hash, is_bot)

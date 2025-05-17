@@ -6,4 +6,5 @@ extend-exclude = [
     "chat/chat_server/fixtures/*",
     "chat/chat_core/fixtures/*",
     "chat/notify_server/*.html",
+    "chatapp/src/gen/*",
 ]
