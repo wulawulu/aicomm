@@ -1,5 +1,5 @@
 [workspace]
-members = [ "ai_sdk", "analytics_server", "bot_server", "chat_core","chat_server", "chat_test", "notify_server"]
+members = [ "ai_sdk", "analytics_server", "bot_server", "chat_core","chat_server", "chat_test", "notify_server", "simulator"]
 
 resolver = "2"
 
