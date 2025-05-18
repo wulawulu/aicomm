@@ -33,13 +33,6 @@ prost-types = "0.13.5"
 futures-util = {version = "0.3.31", default-features = false}
 dashmap = { workspace = true }
 
-[build-dependencies]
-anyhow.workspace = true
-prost-build = "0.13.5"
-proto-builder-trait = { version = "0.6.2", features = [
-    "prost",
-], default-features = false }
-
 [dev-dependencies]
 clickhouse = { version = "0.13.2", features = ["rustls-tls", "time", "test-util"] }
 reqwest = { workspace = true }

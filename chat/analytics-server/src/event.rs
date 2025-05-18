@@ -1,16 +1,14 @@
-use crate::{
-    AppError, AppState,
-    pb::{analytics_event::EventType, *},
-};
+use crate::{AppError, AppState};
 
 use axum::http::request::Parts;
-use chat_core::User;
+use chat_core::{
+    User,
+    pb::{analytics_event::EventType, *},
+};
 use clickhouse::Row;
 use serde::{Deserialize, Serialize};
 use tracing::{info, warn};
 use uuid::Uuid;
-
-use crate::pb::AnalyticsEvent;
 
 const SESSION_TIMEOUT: i64 = 10 * 60 * 1000; // 10 minutes
 

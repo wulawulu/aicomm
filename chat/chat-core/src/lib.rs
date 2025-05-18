@@ -1,12 +1,14 @@
 mod middleware;
+pub mod pb;
 mod utils;
+
+pub use utils::*;
 
 use chrono::{DateTime, Utc};
 pub use middleware::{TokenVerify, set_layer, verify_token};
 use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
 use thiserror::Error;
-pub use utils::*;
 use utoipa::ToSchema;
 
 #[allow(async_fn_in_trait)]

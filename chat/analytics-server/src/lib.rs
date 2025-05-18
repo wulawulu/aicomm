@@ -4,7 +4,6 @@ mod event;
 mod extractors;
 mod handlers;
 mod openapi;
-pub mod pb;
 
 use dashmap::DashMap;
 pub use error::ErrorOutput;

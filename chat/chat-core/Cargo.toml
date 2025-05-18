@@ -20,3 +20,12 @@ tower = { workspace = true }
 tower-http = {workspace = true }
 utoipa = { version = "5.3.1", features = ["axum_extras", "chrono"] }
 josekit = { workspace = true }
+prost = "0.13.5"
+prost-types = "0.13.5"
+
+[build-dependencies]
+anyhow.workspace = true
+prost-build = "0.13.5"
+proto-builder-trait = { version = "0.6.2", features = [
+    "prost",
+], default-features = false }

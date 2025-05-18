@@ -3,13 +3,13 @@ use axum::{
     http::{StatusCode, request::Parts},
     response::IntoResponse,
 };
+use chat_core::pb::AnalyticsEvent;
 use tracing::info;
 
 use crate::{
     AppError, AppState, ErrorOutput,
     event::AnalyticsEventRow,
     extractors::{Geo, Protobuf},
-    pb::AnalyticsEvent,
 };
 
 #[utoipa::path(

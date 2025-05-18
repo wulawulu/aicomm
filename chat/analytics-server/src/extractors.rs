@@ -9,7 +9,7 @@ use axum::{
 use futures_util::StreamExt;
 use prost::DecodeError;
 
-use crate::pb::GeoLocation;
+use chat_core::pb::GeoLocation;
 
 pub struct Protobuf<T>(pub T);
 pub struct Geo(pub Option<GeoLocation>);
