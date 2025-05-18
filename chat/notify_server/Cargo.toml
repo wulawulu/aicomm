@@ -1,5 +1,5 @@
 [package]
-name = "notify-server"
+name = "notify_server"
 version = "0.1.0"
 edition = "2021"
 license = "MIT"
@@ -8,7 +8,7 @@ license = "MIT"
 anyhow = { workspace = true }
 axum = { workspace = true }
 axum-extra = { version = "0.10.1", features = ["typed-header"] }
-chat-core = { path = "../chat-core" }
+chat_core = { path = "../chat_core" }
 futures = "0.3.31"
 serde = { workspace = true }
 serde_yaml = { workspace = true }

@@ -1,14 +1,14 @@
 [package]
-name = "chat-test"
+name = "chat_test"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
 
 [dev-dependencies]
 axum-extra = { workspace = true }
-chat-core = { workspace = true }
-chat-server = { workspace = true, features = ["test-util"] }
-notify-server = { workspace = true }
+chat_core = { workspace = true }
+chat_server = { workspace = true, features = ["test-util"] }
+notify_server = { workspace = true }
 anyhow = { workspace = true }
 axum = { workspace = true }
 reqwest = { version = "0.12.15", default-features = false, features = [

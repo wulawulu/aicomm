@@ -78,13 +78,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "683d7910e743518b0e34f1186f92494becacb047c7b6bf616c96772180fef923"
 
 [[package]]
-name = "analytics-server"
+name = "analytics_server"
 version = "0.1.0"
 dependencies = [
  "anyhow",
  "axum",
  "axum-extra",
- "chat-core",
+ "chat_core",
  "chrono",
  "clickhouse",
  "dashmap",
@@ -570,11 +570,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "bot-server"
+name = "bot_server"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "chat-core",
+ "chat_core",
  "futures",
  "serde",
  "serde_json",
@@ -698,7 +698,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "613afe47fcd5fac7ccf1db93babcb082c5994d996f20b8b159f2ad1658eb5724"
 
 [[package]]
-name = "chat-core"
+name = "chat_core"
 version = "0.1.0"
 dependencies = [
  "anyhow",
@@ -723,7 +723,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "chat-server"
+name = "chat_server"
 version = "0.1.0"
 dependencies = [
  "ai_sdk",
@@ -731,8 +731,8 @@ dependencies = [
  "argon2",
  "axum",
  "axum-extra",
- "chat-core",
- "chat-server",
+ "chat_core",
+ "chat_server",
  "hex",
  "http-body-util",
  "josekit",
@@ -758,16 +758,16 @@ dependencies = [
 ]
 
 [[package]]
-name = "chat-test"
+name = "chat_test"
 version = "0.1.0"
 dependencies = [
  "anyhow",
  "axum",
  "axum-extra",
- "chat-core",
- "chat-server",
+ "chat_core",
+ "chat_server",
  "futures",
- "notify-server",
+ "notify_server",
  "reqwest 0.12.15",
  "reqwest-eventsource 0.6.0",
  "serde",
@@ -2820,13 +2820,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0676bb32a98c1a483ce53e500a81ad9c3d5b3f7c920c28c24e9cb0980d0b5bc8"
 
 [[package]]
-name = "notify-server"
+name = "notify_server"
 version = "0.1.0"
 dependencies = [
  "anyhow",
  "axum",
  "axum-extra",
- "chat-core",
+ "chat_core",
  "dashmap",
  "futures",
  "josekit",
