@@ -87,6 +87,7 @@ dependencies = [
  "chat-core",
  "chrono",
  "clickhouse",
+ "dashmap",
  "futures-util",
  "http-body-util",
  "prost",
