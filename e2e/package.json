@@ -1,0 +1,21 @@
+{
+  "name": "e2e",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "@types/node": "^22.15.18"
+  },
+  "dependencies": {
+    "@bufbuild/buf": "^1.54.0",
+    "@bufbuild/protobuf": "^2.4.0",
+    "@bufbuild/protoc-gen-es": "^2.4.0",
+    "uuid": "^11.1.0"
+  }
+}
