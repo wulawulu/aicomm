@@ -13,6 +13,7 @@ path = "src/indexer.rs"
 
 [dependencies]
 anyhow = { workspace = true }
+async-openai = "0.28.1"
 chat_core = { path = "../chat_core" }
 futures = "0.3.31"
 serde = { workspace = true }
