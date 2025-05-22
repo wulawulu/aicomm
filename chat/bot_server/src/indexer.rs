@@ -1,4 +1,5 @@
 use anyhow::Result;
+use async_openai::config::OpenAIConfig;
 use bot_server::{AppConfig, VECTOR_SIZE};
 use swiftide::{
     indexing::{
@@ -22,9 +23,14 @@ async fn main() -> Result<()> {
     let db_url = &config.server.db_url;
 
     let fastembed = integrations::fastembed::FastEmbed::try_default()?;
-    let client = integrations::ollama::Ollama::default()
-        .with_default_prompt_model("qwen3:0.6b")
-        .to_owned();
+    let client = integrations::openai::OpenAIBuilder::default()
+        .client(async_openai::Client::with_config(
+            OpenAIConfig::default()
+                .with_api_base("https://api.deepseek.com")
+                .to_owned(),
+        ))
+        .default_prompt_model("deepseek-chat")
+        .build()?;
     let store = PgVector::builder()
         .db_url(db_url)
         .vector_size(VECTOR_SIZE)
